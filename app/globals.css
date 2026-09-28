@@ -52,3 +52,20 @@
 .dash-mobile-menu nav{background:rgba(255,255,255,.98);border-color:rgba(184,138,34,.20);box-shadow:0 14px 36px rgba(0,0,0,.14)}
 [data-theme=dark] .dash-mobile-menu nav{background:rgba(29,29,31,.98);border-color:rgba(214,174,80,.24);box-shadow:0 14px 36px rgba(0,0,0,.30)}
 @media(max-width:760px){.dash-header{background:#fff}[data-theme=dark] .dash-header{background:#0a0a0a}}
+
+/* Correção definitiva do menu hambúrguer mobile */
+@media(max-width:900px){
+  .dash-header{position:sticky;top:0;z-index:200;display:flex!important;align-items:center!important;min-height:60px}
+  .dash-header .dash-nav{display:none!important}
+  .dash-mobile-menu{display:flex!important;visibility:visible!important;opacity:1!important;width:42px;height:42px;flex:0 0 42px;margin-left:auto;position:relative;z-index:9999}
+  .dash-mobile-menu summary{display:flex!important;visibility:visible!important;opacity:1!important;width:42px;height:42px;position:relative;z-index:10000}
+  .dash-mobile-menu summary::before,.dash-mobile-menu summary::after{z-index:2}
+}
+@media(min-width:901px){
+  .dash-mobile-menu{display:none!important}
+}
+/* Sem desfoque no cabeçalho/menu */
+.site-header,.dash-header,.dash-mobile-menu nav{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
