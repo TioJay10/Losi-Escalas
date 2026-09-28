@@ -6,14 +6,13 @@ function RevealText({ children, className = "" }: { children: React.ReactNode; c
   const text = typeof children === "string" ? children : "";
   return (
     <span className={`reveal-text ${className}`} aria-label={text}>
-      {text.split("").map((char, index) => (
-        <span
-          className="reveal-char"
-          key={`${char}-${index}`}
-          style={{ "--char-index": index } as React.CSSProperties}
-          aria-hidden="true"
-        >
-          {char === " " ? "\u00A0" : char}
+      {text.split(/(\\s+)/).map((part, index) => (
+        <span className="reveal-word" key={`${part}-${index}`} aria-hidden="true">
+          {part.trim()
+            ? part.split("").map((char, charIndex) => (
+                <span className="reveal-char" key={`${char}-${charIndex}`} style={{ "--char-index": charIndex } as React.CSSProperties}>{char}</span>
+              ))
+            : "\u00A0"}
         </span>
       ))}
     </span>
