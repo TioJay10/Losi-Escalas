@@ -78,7 +78,7 @@ export default function Home() {
         <div className="hero-content">
           <div className="eyebrow"><span className="eyebrow-dot"/> Gestão operacional inteligente</div>
           <h1><RevealText>Seu parque.</RevealText><br/><RevealText className="gold-text">Sua equipe.</RevealText><br/><RevealText>Tudo sob controle.</RevealText></h1>
-          <p className="hero-copy"><RevealText>O LOSI ESCALA transforma disponibilidade de freelancers, escalas, grupos e programação em uma operação organizada, visual e inteligente.</RevealText></p>
+          <p className="hero-copy"><RevealText>Organize sua equipe, crie escalas e acompanhe a operação do seu parque em um só lugar.</RevealText></p>
           <div className="hero-actions">
             <a className="button" href="#contato">Quero conhecer o LOSI ESCALA <span>→</span></a>
             <a className="text-link" href="#solucao">Descobrir como funciona <span>↓</span></a>
@@ -99,20 +99,20 @@ export default function Home() {
       </section>
 
       <section className="statement">
-        <RevealText className="statement-kicker">PARQUES PRECISAM DE OPERAÇÃO. NÃO DE IMPROVISO.</RevealText>
-        <h2><RevealText>Chega de depender de planilhas, mensagens espalhadas e ajustes manuais para descobrir quem trabalha, onde e quando.</RevealText></h2>
+        <RevealText className="statement-kicker">GESTÃO SIMPLES. OPERAÇÃO ORGANIZADA.</RevealText>
+        <h2><RevealText>Saiba quem trabalha, onde e quando. Tudo organizado em um só sistema.</RevealText></h2>
       </section>
 
       <section id="solucao" className="solution section">
-        <div className="section-intro"><RevealText className="eyebrow-text">UMA NOVA FORMA DE OPERAR</RevealText><h2><RevealText>Do caos operacional para uma rotina organizada.</RevealText></h2></div>
+        <div className="section-intro"><RevealText className="eyebrow-text">TUDO EM UM SÓ LUGAR</RevealText><h2><RevealText>Equipe, escalas, grupos e programação organizados.</RevealText></h2></div>
         <div className="feature-grid">
           {[
-            ["users","Freelancers","Centralize disponibilidade, identificação e participação em escalas."],
-            ["calendar","Escalas","Crie escalas, defina limites e compartilhe links personalizados."],
-            ["layers","Grupos","Cadastre grupos, responsáveis, transporte e informações próprias do seu parque."],
-            ["spark","Programação inteligente","Distribua atividades respeitando horários, duração, capacidade e regras."],
-            ["shield","Controle de acesso","Cada pessoa enxerga apenas o que está autorizada a acompanhar."],
-            ["chart","Operação em tempo real","Saiba o que está acontecendo agora e o que vem a seguir."]
+            ["users","Freelancers","Cadastre sua equipe e controle a disponibilidade."],
+            ["calendar","Escalas","Crie escalas e compartilhe com sua equipe."],
+            ["layers","Grupos","Organize grupos, responsáveis e transportes."],
+            ["spark","Programação inteligente","Monte a programação com horários, limites e regras."],
+            ["shield","Controle de acesso","Cada usuário acessa somente o que precisa."],
+            ["chart","Operação em tempo real","Acompanhe o que acontece agora e o próximo passo."]
           ].map(([icon,title,desc]) => (
             <article className="feature-card" key={title}>
               <div className="icon-box"><Icon type={icon as "spark"}/></div>
@@ -125,19 +125,19 @@ export default function Home() {
 
       <section id="recursos" className="immersive-section">
         <div className="immersive-copy">
-          <RevealText className="eyebrow-text">FEITO PARA A REALIDADE DO SEU PARQUE</RevealText>
-          <h2><RevealText>O sistema se adapta ao seu parque. Não o contrário.</RevealText></h2>
-          <p><RevealText>Nome, logo, cores, atividades, regras, campos personalizados e links com a identidade do próprio parque.</RevealText></p>
-          <p><RevealText>Seu gestor organiza. Seu freelancer acessa. Seu grupo acompanha. Todos conectados à mesma operação.</RevealText></p>
+          <RevealText className="eyebrow-text">DO SEU JEITO</RevealText>
+          <h2><RevealText>Configure o sistema para o seu parque.</RevealText></h2>
+          <p><RevealText>Personalize nome, logo, cores, atividades e regras.</RevealText></p>
+          <p><RevealText>Gestor, equipe e grupos conectados à mesma operação.</RevealText></p>
         </div>
         <div className="brand-preview">
-          <div className="park-logo">TM</div><div><strong>THERMAS DA MATA</strong><span>Escala de colaboradores</span></div>
+          <div className="park-logo">L</div><div><strong>SEU PARQUE</strong><span>Escala de colaboradores</span></div>
           <div className="preview-link">/escala/8K4X9</div>
         </div>
       </section>
 
       <section id="operacao" className="operation section">
-        <div className="section-intro"><RevealText className="eyebrow-text">UMA VISÃO QUE ACOMPANHA O DIA</RevealText><h2><RevealText>Veja o agora. Antecipe o próximo.</RevealText></h2></div>
+        <div className="section-intro"><RevealText className="eyebrow-text">OPERAÇÃO EM TEMPO REAL</RevealText><h2><RevealText>Saiba o que está acontecendo e o que vem depois.</RevealText></h2></div>
         <div className="timeline">
           {[
             ["AGORA","09:30 — 10:00","Piscina","Grupo Azul"],
