@@ -45,10 +45,10 @@
 
 
 /* Glass premium do cabeçalho — leve para manter fluidez no mobile */
-.site-header{background:rgba(255,255,255,.72);backdrop-filter:saturate(145%) blur(12px);-webkit-backdrop-filter:saturate(145%) blur(12px);border-bottom:1px solid rgba(184,138,34,.18);box-shadow:0 6px 24px rgba(0,0,0,.05)}
-[data-theme=dark] .site-header{background:rgba(10,10,10,.68);border-bottom-color:rgba(214,174,80,.22);box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.dash-header{background:rgba(255,255,255,.70);backdrop-filter:saturate(145%) blur(12px);-webkit-backdrop-filter:saturate(145%) blur(12px);border-bottom:1px solid rgba(184,138,34,.20);box-shadow:0 6px 24px rgba(0,0,0,.045)}
-[data-theme=dark] .dash-header{background:rgba(10,10,10,.68);border-bottom-color:rgba(214,174,80,.24);box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.dash-mobile-menu nav{background:rgba(255,255,255,.82);backdrop-filter:saturate(140%) blur(10px);-webkit-backdrop-filter:saturate(140%) blur(10px);border-color:rgba(184,138,34,.20);box-shadow:0 14px 36px rgba(0,0,0,.14)}
-[data-theme=dark] .dash-mobile-menu nav{background:rgba(29,29,31,.82);border-color:rgba(214,174,80,.24);box-shadow:0 14px 36px rgba(0,0,0,.30)}
-@media(max-width:760px){.dash-header{background:rgba(255,255,255,.78);backdrop-filter:saturate(135%) blur(9px);-webkit-backdrop-filter:saturate(135%) blur(9px)}[data-theme=dark] .dash-header{background:rgba(10,10,10,.76)}}
+.site-header{background:rgba(255,255,255,.96);border-bottom:1px solid rgba(184,138,34,.18);box-shadow:0 6px 24px rgba(0,0,0,.05)}
+[data-theme=dark] .site-header{background:rgba(10,10,10,.96);border-bottom-color:rgba(214,174,80,.22);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.dash-header{background:rgba(255,255,255,.96);border-bottom:1px solid rgba(184,138,34,.20);box-shadow:0 6px 24px rgba(0,0,0,.045)}
+[data-theme=dark] .dash-header{background:rgba(10,10,10,.96);border-bottom-color:rgba(214,174,80,.24);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.dash-mobile-menu nav{background:rgba(255,255,255,.98);border-color:rgba(184,138,34,.20);box-shadow:0 14px 36px rgba(0,0,0,.14)}
+[data-theme=dark] .dash-mobile-menu nav{background:rgba(29,29,31,.98);border-color:rgba(214,174,80,.24);box-shadow:0 14px 36px rgba(0,0,0,.30)}
+@media(max-width:760px){.dash-header{background:#fff}[data-theme=dark] .dash-header{background:#0a0a0a}}
