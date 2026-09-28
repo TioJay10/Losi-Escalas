@@ -15,16 +15,16 @@ function time(v:string){return new Date(v).toLocaleTimeString("pt-BR",{hour:"2-d
 
 export default function FreelancerPage(){
  const [me,setMe]=useState<Freelancer|null>(null),[scales,setScales]=useState<Scale[]>([]),[groups,setGroups]=useState<Group[]>([]),[items,setItems]=useState<Item[]>([]),[tab,setTab]=useState<"inicio"|"escalas"|"grupos"|"programacao">("inicio"),[error,setError]=useState(""),[loading,setLoading]=useState(true),[leaving,setLeaving]=useState("");
- async function call(fn:string,args:any={}){const {data,error}=await supabase.rpc(fn,args);if(error)throw error;return data}
+ async function call(action:string,args:any={}){const {data,error}=await supabase.functions.invoke("freelancer-auth",{body:{action,...args}});if(error)throw error;if(data?.error)throw new Error(data.error);return data}
  async function load(){
    const t=localStorage.getItem(tokenKey); if(!t){location.href="/entrar";return}
-   try{const m=await call("freelancer_me",{p_token:t});setMe(m);const [s,g,p]=await Promise.all([call("freelancer_scales",{p_token:t}),call("freelancer_groups",{p_token:t}),call("freelancer_program",{p_token:t})]);setScales(s||[]);setGroups(g||[]);setItems(p||[]);setError("")}
+   try{const m=await call("me",{token:t});setMe(m);const [s,g,p]=await Promise.all([call("scales",{token:t}),call("groups",{token:t}),call("program",{token:t})]);setScales(s||[]);setGroups(g||[]);setItems(p||[]);setError("")}
    catch(e:any){localStorage.removeItem(tokenKey);setError("Sua sessão expirou. Entre novamente.");}
    finally{setLoading(false)}
  }
  useEffect(()=>{void load()},[]);
- async function logout(){const t=localStorage.getItem(tokenKey);if(t){try{await call("freelancer_logout",{p_token:t})}catch{}}localStorage.removeItem(tokenKey);location.href="/entrar"}
- async function leave(id:string){const t=localStorage.getItem(tokenKey);if(!t)return;setLeaving(id);try{await call("freelancer_leave_scale",{p_token:t,p_scale_id:id});await load()}catch(e:any){setError(e?.message==="cannot_leave"?"Esta escala não pode mais ser abandonada.":"Não foi possível sair da escala.")}finally{setLeaving("")}}
+ async function logout(){const t=localStorage.getItem(tokenKey);if(t){try{await call("logout",{token:t})}catch{}}localStorage.removeItem(tokenKey);location.href="/entrar"}
+ async function leave(id:string){const t=localStorage.getItem(tokenKey);if(!t)return;setLeaving(id);try{await call("leave_scale",{token:t,scale_id:id});await load()}catch(e:any){setError(e?.message==="cannot_leave"?"Esta escala não pode mais ser abandonada.":"Não foi possível sair da escala.")}finally{setLeaving("")}}
  const now=Date.now();
  const next=useMemo(()=>items.filter(x=>new Date(x.ends_at).getTime()>now).sort((a,b)=>new Date(a.starts_at).getTime()-new Date(b.starts_at).getTime())[0],[items,now]);
  if(loading)return <main className="dashboard"><section className="dash-hero"><div><span className="eyebrow-text">LOSI ESCALA</span><h1>Carregando<br/><span>seu acesso.</span></h1></div></section></main>;
