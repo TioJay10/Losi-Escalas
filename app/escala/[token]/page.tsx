@@ -22,11 +22,7 @@ export default function EscalaPublica({ params }: ScalePageProps) {
       if (cancelled) return;
       setToken(resolved.token);
 
-      const { data, error } = await supabase
-        .from("scales")
-        .select("id,date,start_time,end_time,max_freelancers,status,parks(name,logo_url,primary_color)")
-        .eq("share_token", resolved.token)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_public_scale", { p_token: resolved.token });
 
       if (!cancelled) {
         if (!error) setS(data);
@@ -66,7 +62,7 @@ export default function EscalaPublica({ params }: ScalePageProps) {
   return (
     <main className="public-scale">
       <div className="public-scale-card">
-        <span className="eyebrow-text">{s.parks?.name || "SEU PARQUE"}</span>
+        <span className="eyebrow-text">{s.park?.name || "SEU PARQUE"}</span>
         <h1>Escala de equipe</h1>
         <p>
           {new Date(s.date + "T12:00:00").toLocaleDateString("pt-BR")} ·{" "}
