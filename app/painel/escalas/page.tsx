@@ -222,7 +222,7 @@ export default function EscalasPage() {
           <Link href="/painel/freelancers">Freelancers</Link>
           <Link href="/painel/grupos">Grupos</Link>
           <Link href="/painel/programacoes">Programações</Link>
-        </nav>
+        </nav><details className="dash-mobile-menu"><summary aria-label="Abrir menu">☰</summary><nav><Link href="/painel">Visão geral</Link><Link href="/painel/escalas" className="active">Escalas</Link><Link href="/painel/freelancers">Freelancers</Link><Link href="/painel/grupos">Grupos</Link><Link href="/painel/programacoes">Programações</Link></nav></details>
         <div className="dash-user"><span>SEU PARQUE</span><b>Gestor</b></div>
         <Link href="/painel" className="scales-back-mobile" aria-label="Voltar ao painel">←</Link>
       </header>
