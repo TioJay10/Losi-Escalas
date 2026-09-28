@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
-type Status = "Aberta" | "Cheia" | "Fechada" | "Cancelada";
+type DbStatus = "draft" | "open" | "full" | "closed" | "cancelled";
+type Status = "Aberta" | "Cheia" | "Fechada" | "Cancelada" | "Rascunho";
 
 type Scale = {
   id: string;
@@ -14,74 +16,206 @@ type Scale = {
   capacity: number;
   occupied: number;
   status: Status;
+  dbStatus: DbStatus;
   notes: string;
+  shareToken: string;
 };
 
-const initialScales: Scale[] = [
-  { id: "ESC-20260928-01", date: "28/09/2026", day: "Hoje", start: "08:00", end: "17:00", capacity: 12, occupied: 8, status: "Aberta", notes: "Operação regular do parque." },
-  { id: "ESC-20260929-01", date: "29/09/2026", day: "Amanhã", start: "09:00", end: "18:00", capacity: 10, occupied: 10, status: "Cheia", notes: "Escala com capacidade máxima." },
-  { id: "ESC-20261001-01", date: "01/10/2026", day: "Qui", start: "08:30", end: "16:30", capacity: 14, occupied: 6, status: "Aberta", notes: "" },
-  { id: "ESC-20261003-01", date: "03/10/2026", day: "Sáb", start: "09:00", end: "19:00", capacity: 16, occupied: 0, status: "Fechada", notes: "Aguardando abertura da operação." },
-];
+const statusLabel: Record<DbStatus, Status> = {
+  draft: "Rascunho",
+  open: "Aberta",
+  full: "Cheia",
+  closed: "Fechada",
+  cancelled: "Cancelada",
+};
 
 const statusClass: Record<Status, string> = {
   Aberta: "scale-status-open",
   Cheia: "scale-status-full",
   Fechada: "scale-status-closed",
   Cancelada: "scale-status-cancelled",
+  Rascunho: "scale-status-closed",
 };
 
+function formatDate(value: string) {
+  return new Date(value + "T12:00:00").toLocaleDateString("pt-BR");
+}
+
+function weekday(value: string) {
+  const label = new Date(value + "T12:00:00")
+    .toLocaleDateString("pt-BR", { weekday: "short" })
+    .replace(".", "");
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 export default function EscalasPage() {
-  const [scales, setScales] = useState(initialScales);
+  const [scales, setScales] = useState<Scale[]>([]);
   const [filter, setFilter] = useState<"Todas" | Status>("Todas");
   const [showNew, setShowNew] = useState(false);
   const [copied, setCopied] = useState("");
-  const [form, setForm] = useState({ date: "", start: "08:00", end: "17:00", capacity: "10", notes: "" });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [parkId, setParkId] = useState("");
+  const [form, setForm] = useState({
+    date: "",
+    start: "08:00",
+    end: "17:00",
+    capacity: "10",
+    notes: "",
+  });
 
   const filtered = useMemo(
     () => filter === "Todas" ? scales : scales.filter((scale) => scale.status === filter),
     [filter, scales]
   );
 
-  function createScale(event: React.FormEvent) {
-    event.preventDefault();
-    if (!form.date || !form.start || !form.end || Number(form.capacity) < 1) return;
-    const date = new Date(form.date + "T12:00:00");
-    const day = date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
-    const dateLabel = date.toLocaleDateString("pt-BR");
-    setScales((current) => [
-      {
-        id: `ESC-${form.date.replaceAll("-", "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
-        date: dateLabel,
-        day: day.charAt(0).toUpperCase() + day.slice(1),
-        start: form.start,
-        end: form.end,
-        capacity: Number(form.capacity),
-        occupied: 0,
-        status: "Aberta",
-        notes: form.notes,
-      },
-      ...current,
-    ]);
-    setForm({ date: "", start: "08:00", end: "17:00", capacity: "10", notes: "" });
-    setShowNew(false);
+  async function loadScales() {
+    setLoading(true);
+    setError("");
+
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) {
+      setError("Entre como gestor para acessar as escalas do parque.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: membership, error: membershipError } = await supabase
+      .from("park_users")
+      .select("park_id")
+      .eq("id", auth.user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (membershipError || !membership) {
+      setError("Seu usuário ainda não está vinculado a um parque.");
+      setLoading(false);
+      return;
+    }
+
+    setParkId(membership.park_id);
+
+    const { data, error: scalesError } = await supabase
+      .from("scales")
+      .select("id,date,start_time,end_time,max_freelancers,status,notes,share_token,scale_freelancers(status)")
+      .eq("park_id", membership.park_id)
+      .order("date", { ascending: true })
+      .order("start_time", { ascending: true });
+
+    if (scalesError) {
+      setError("Não foi possível carregar as escalas.");
+      setLoading(false);
+      return;
+    }
+
+    setScales((data ?? []).map((row) => {
+      const activeParticipants = (row.scale_freelancers ?? []).filter(
+        (item: { status: string }) => item.status === "confirmed" || item.status === "available"
+      ).length;
+      const dbStatus = row.status as DbStatus;
+      return {
+        id: row.id,
+        date: row.date,
+        day: weekday(row.date),
+        start: row.start_time.slice(0, 5),
+        end: row.end_time.slice(0, 5),
+        capacity: row.max_freelancers,
+        occupied: activeParticipants,
+        status: statusLabel[dbStatus],
+        dbStatus,
+        notes: row.notes ?? "",
+        shareToken: row.share_token,
+      };
+    }));
+
+    setLoading(false);
   }
 
-  function copyLink(id: string) {
-    const url = `${window.location.origin}/escala/${id}`;
-    navigator.clipboard?.writeText(url);
-    setCopied(id);
+  useEffect(() => {
+    void loadScales();
+  }, []);
+
+  async function createScale(event: React.FormEvent) {
+    event.preventDefault();
+    if (!parkId || !form.date || !form.start || !form.end || Number(form.capacity) < 1) return;
+
+    setSaving(true);
+    setError("");
+
+    const { data: auth } = await supabase.auth.getUser();
+    const { data, error: createError } = await supabase
+      .from("scales")
+      .insert({
+        park_id: parkId,
+        date: form.date,
+        start_time: form.start,
+        end_time: form.end,
+        max_freelancers: Number(form.capacity),
+        notes: form.notes.trim() || null,
+        status: "open",
+        created_by: auth.user?.id ?? null,
+      })
+      .select("id,date,start_time,end_time,max_freelancers,status,notes,share_token")
+      .single();
+
+    if (createError || !data) {
+      setError("Não foi possível criar a escala. Verifique seu acesso ao parque.");
+      setSaving(false);
+      return;
+    }
+
+    setScales((current) => [{
+      id: data.id,
+      date: data.date,
+      day: weekday(data.date),
+      start: data.start_time.slice(0, 5),
+      end: data.end_time.slice(0, 5),
+      capacity: data.max_freelancers,
+      occupied: 0,
+      status: "Aberta",
+      dbStatus: "open",
+      notes: data.notes ?? "",
+      shareToken: data.share_token,
+    }, ...current]);
+
+    setForm({ date: "", start: "08:00", end: "17:00", capacity: "10", notes: "" });
+    setShowNew(false);
+    setSaving(false);
+  }
+
+  async function copyLink(scale: Scale) {
+    const url = `${window.location.origin}/escala/${scale.shareToken}`;
+    await navigator.clipboard?.writeText(url);
+    setCopied(scale.id);
     window.setTimeout(() => setCopied(""), 1800);
   }
 
-  function changeStatus(id: string, status: Status) {
-    setScales((current) => current.map((scale) => scale.id === id ? { ...scale, status } : scale));
+  async function changeStatus(scale: Scale, nextStatus: "open" | "closed") {
+    const { error: updateError } = await supabase
+      .from("scales")
+      .update({ status: nextStatus, updated_at: new Date().toISOString() })
+      .eq("id", scale.id)
+      .eq("park_id", parkId);
+
+    if (updateError) {
+      setError("Não foi possível alterar o status da escala.");
+      return;
+    }
+
+    setScales((current) => current.map((item) =>
+      item.id === scale.id
+        ? { ...item, dbStatus: nextStatus, status: statusLabel[nextStatus] }
+        : item
+    ));
   }
 
   return (
     <main className="dashboard scales-page">
       <header className="dash-header">
-        <Link href="/painel" className="auth-brand"><span className="brand-mark">L</span><span><b>LOSI</b> ESCALA</span></Link>
+        <Link href="/painel" className="auth-brand">
+          <span className="brand-mark">L</span><span><b>LOSI</b> ESCALA</span>
+        </Link>
         <nav className="dash-nav">
           <Link href="/painel">Visão geral</Link>
           <Link href="/painel/escalas" className="active">Escalas</Link>
@@ -99,8 +233,10 @@ export default function EscalasPage() {
           <h1>Escalas.<br /><span>Organize cada dia.</span></h1>
           <p>Crie a escala, defina a capacidade e compartilhe um único link para que os freelancers confirmem sua disponibilidade.</p>
         </div>
-        <button className="button" onClick={() => setShowNew(true)}>+ Nova escala</button>
+        <button className="button" onClick={() => setShowNew(true)} disabled={!parkId}>+ Nova escala</button>
       </section>
+
+      {error && <div className="scales-error">{error}</div>}
 
       <section className="scales-content">
         <div className="scale-summary">
@@ -115,10 +251,17 @@ export default function EscalasPage() {
               <button key={item} className={filter === item ? "filter-active" : ""} onClick={() => setFilter(item)}>{item}</button>
             ))}
           </div>
-          <span>{filtered.length} escala(s)</span>
+          <span>{loading ? "Carregando..." : `${filtered.length} escala(s)`}</span>
         </div>
 
         <div className="scale-list">
+          {!loading && filtered.length === 0 && (
+            <div className="scale-empty">
+              <strong>Nenhuma escala cadastrada.</strong>
+              <span>Crie a primeira escala para começar a organizar sua equipe.</span>
+            </div>
+          )}
+
           {filtered.map((scale) => {
             const available = Math.max(scale.capacity - scale.occupied, 0);
             const percent = Math.min((scale.occupied / scale.capacity) * 100, 100);
@@ -126,13 +269,13 @@ export default function EscalasPage() {
               <article className="scale-card" key={scale.id}>
                 <div className="scale-date">
                   <span>{scale.day}</span>
-                  <strong>{scale.date.split("/")[0]}</strong>
-                  <small>{scale.date.slice(3)}</small>
+                  <strong>{formatDate(scale.date).split("/")[0]}</strong>
+                  <small>{formatDate(scale.date).slice(3)}</small>
                 </div>
                 <div className="scale-main">
                   <div className="scale-title-row">
                     <div>
-                      <span className="scale-id">{scale.id}</span>
+                      <span className="scale-id">{scale.id.slice(0, 8).toUpperCase()}</span>
                       <h2>{scale.start} — {scale.end}</h2>
                     </div>
                     <span className={`scale-status ${statusClass[scale.status]}`}>{scale.status}</span>
@@ -145,9 +288,9 @@ export default function EscalasPage() {
                   </div>
                 </div>
                 <div className="scale-actions">
-                  <button onClick={() => copyLink(scale.id)}>{copied === scale.id ? "Link copiado ✓" : "Compartilhar link ↗"}</button>
-                  {scale.status === "Aberta" && <button onClick={() => changeStatus(scale.id, "Fechada")}>Fechar escala</button>}
-                  {scale.status === "Fechada" && <button onClick={() => changeStatus(scale.id, "Aberta")}>Abrir escala</button>}
+                  <button onClick={() => void copyLink(scale)}>{copied === scale.id ? "Link copiado ✓" : "Compartilhar link ↗"}</button>
+                  {scale.status === "Aberta" && <button onClick={() => void changeStatus(scale, "closed")}>Fechar escala</button>}
+                  {scale.status === "Fechada" && <button onClick={() => void changeStatus(scale, "open")}>Abrir escala</button>}
                   <Link href={`/painel/escalas/${scale.id}`}>Gerenciar →</Link>
                 </div>
               </article>
@@ -170,7 +313,10 @@ export default function EscalasPage() {
               <label>Fim<input type="time" value={form.end} onChange={(e) => setForm({ ...form, end: e.target.value })} required /></label>
             </div>
             <label className="scale-notes">Observações<textarea rows={4} placeholder="Ex.: operação especial, horário de chegada..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>
-            <div className="scale-modal-footer"><button type="button" className="scale-cancel" onClick={() => setShowNew(false)}>Cancelar</button><button className="button" type="submit">Criar escala</button></div>
+            <div className="scale-modal-footer">
+              <button type="button" className="scale-cancel" onClick={() => setShowNew(false)}>Cancelar</button>
+              <button className="button" type="submit" disabled={saving}>{saving ? "Criando..." : "Criar escala"}</button>
+            </div>
           </form>
         </div>
       )}
