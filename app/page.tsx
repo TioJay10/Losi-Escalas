@@ -1,5 +1,6 @@
+"use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 
 function RevealText({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const text = typeof children === "string" ? children : "";
@@ -34,19 +35,32 @@ function Icon({ type }: { type: "users"|"calendar"|"layers"|"spark"|"shield"|"ch
 export default function Home() {
   const [dark, setDark] = useState(false);
 
+  useLayoutEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+  }, []);
+
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
   }, [dark]);
 
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
+    const forceTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    const handlePageShow = () => forceTop();
 
-    window.scrollTo(0, 0);
-    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 0));
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("beforeunload", () => {
+      if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+    });
 
-    return () => window.cancelAnimationFrame(frame);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
   useEffect(() => {
@@ -84,7 +98,7 @@ export default function Home() {
       <section className="hero">
         <div className="hero-content">
           <div className="eyebrow"><span className="eyebrow-dot"/> Sistema de gestão para parques</div>
-          <h1><RevealText>Organize sua equipe.</RevealText><br/><RevealText className="gold-text">Monte suas escalas.</RevealText><br/><RevealText>Controle sua operação.</RevealText></h1>
+          <h1><RevealText>Organize sua equipe,</RevealText><br/><RevealText className="gold-text">Monte suas escalas,</RevealText><br/><RevealText>Controle sua operação.</RevealText></h1>
           <p className="hero-copy"><RevealText>O LOSI ESCALA reúne freelancers, escalas, grupos e programação em um único sistema. Você organiza quem trabalha, define onde e quando cada grupo estará e acompanha tudo em tempo real.</RevealText></p>
           <div className="hero-actions">
             <a className="button" href="#contato">Conhecer o LOSI ESCALA <span>→</span></a>
@@ -100,20 +114,9 @@ export default function Home() {
             <h2><RevealText>Da equipe disponível à programação do dia.</RevealText></h2>
           </div>
           <div className="operation-window">
-            <div className="window-top">
-              <span>Operação de hoje</span>
-              <span className="live"><i/> AO VIVO</span>
-            </div>
-            <div className="window-main">
-              <div className="window-number">04</div>
-              <div><span>grupos em operação</span><small>Horários, atividades e equipe organizados em um só lugar.</small></div>
-            </div>
-            <div className="window-grid">
-              <div><strong>01</strong><span>Equipe escalada</span></div>
-              <div><strong>04</strong><span>Grupos organizados</span></div>
-              <div><strong>08</strong><span>Atividades programadas</span></div>
-              <div><strong>100%</strong><span>Visão da operação</span></div>
-            </div>
+            <div className="window-top"><span>Operação de hoje</span><span className="live"><i/> AO VIVO</span></div>
+            <div className="window-main"><div className="window-number">04</div><div><span>grupos em operação</span><small>Horários, atividades e equipe organizados em um só lugar.</small></div></div>
+            <div className="window-grid"><div><strong>01</strong><span>Equipe escalada</span></div><div><strong>04</strong><span>Grupos organizados</span></div><div><strong>08</strong><span>Atividades programadas</span></div><div><strong>100%</strong><span>Visão da operação</span></div></div>
           </div>
         </div>
       </section>
@@ -124,10 +127,7 @@ export default function Home() {
       </section>
 
       <section id="solucao" className="solution section">
-        <div className="section-intro">
-          <RevealText className="eyebrow-text">A SOLUÇÃO</RevealText>
-          <h2><RevealText>Você cadastra, organiza, gera e acompanha.</RevealText></h2>
-        </div>
+        <div className="section-intro"><RevealText className="eyebrow-text">A SOLUÇÃO</RevealText><h2><RevealText>Você cadastra, organiza, gera e acompanha.</RevealText></h2></div>
         <div className="feature-grid">
           {[
             ["users","Cadastre sua equipe","Registre freelancers, contatos e disponibilidade para saber quem pode trabalhar em cada escala."],
@@ -137,41 +137,21 @@ export default function Home() {
             ["shield","Controle os acessos","Cada gestor e freelancer acessa apenas as informações permitidas para sua função."],
             ["chart","Acompanhe em tempo real","Veja o que está acontecendo agora, o próximo horário e a operação de cada grupo."]
           ].map(([icon,title,desc]) => (
-            <article className="feature-card" key={title}>
-              <div className="icon-box"><Icon type={icon as "spark"}/></div>
-              <h3><RevealText>{title}</RevealText></h3>
-              <p><RevealText>{desc}</RevealText></p>
-              <span className="card-arrow">↗</span>
-            </article>
+            <article className="feature-card" key={title}><div className="icon-box"><Icon type={icon as "spark"}/></div><h3><RevealText>{title}</RevealText></h3><p><RevealText>{desc}</RevealText></p><span className="card-arrow">↗</span></article>
           ))}
         </div>
       </section>
 
       <section id="recursos" className="immersive-section">
-        <div className="immersive-copy">
-          <RevealText className="eyebrow-text">FEITO PARA A ROTINA DO PARQUE</RevealText>
-          <h2><RevealText>Menos improviso. Mais controle.</RevealText></h2>
-          <p><RevealText>O gestor sabe quem está disponível, quem está escalado, quais grupos estão ativos e quais atividades precisam acontecer.</RevealText></p>
-          <p><RevealText>O freelancer recebe suas escalas. O grupo tem sua programação. Todos trabalham com a mesma informação.</RevealText></p>
-        </div>
-        <div className="brand-preview">
-          <div className="park-logo">L</div>
-          <div className="brand-preview-copy"><strong>SEU PARQUE</strong><span>Escala de colaboradores</span></div>
-          <div className="preview-link">/escala/8K4X9</div>
-        </div>
+        <div className="immersive-copy"><RevealText className="eyebrow-text">FEITO PARA A ROTINA DO PARQUE</RevealText><h2><RevealText>Menos improviso. Mais controle.</RevealText></h2><p><RevealText>O gestor sabe quem está disponível, quem está escalado, quais grupos estão ativos e quais atividades precisam acontecer.</RevealText></p><p><RevealText>O freelancer recebe suas escalas. O grupo tem sua programação. Todos trabalham com a mesma informação.</RevealText></p></div>
+        <div className="brand-preview"><div className="park-logo">L</div><div className="brand-preview-copy"><strong>SEU PARQUE</strong><span>Escala de colaboradores</span></div><div className="preview-link">/escala/8K4X9</div></div>
       </section>
 
       <section id="operacao" className="operation section">
         <div className="section-intro"><RevealText className="eyebrow-text">NO DIA DA OPERAÇÃO</RevealText><h2><RevealText>O sistema mostra o agora, o próximo passo e quem está responsável.</RevealText></h2></div>
         <div className="timeline">
-          {[
-            ["AGORA","09:30 — 10:00","Piscina","Grupo Azul"],
-            ["PRÓXIMO","10:00 — 10:30","Oficina","Grupo Azul"],
-            ["DEPOIS","10:30 — 11:00","Recreação","Grupo Azul"]
-          ].map(([tag,time,activity,group],i) => (
-            <div className={`timeline-item ${i===0 ? "active":""}`} key={tag}>
-              <span>{tag}</span><div><strong>{time}</strong><b>{activity}</b><small>{group}</small></div>
-            </div>
+          {[["AGORA","09:30 — 10:00","Piscina","Grupo Azul"],["PRÓXIMO","10:00 — 10:30","Oficina","Grupo Azul"],["DEPOIS","10:30 — 11:00","Recreação","Grupo Azul"]].map(([tag,time,activity,group],i) => (
+            <div className={`timeline-item ${i===0 ? "active":""}`} key={tag}><span>{tag}</span><div><strong>{time}</strong><b>{activity}</b><small>{group}</small></div></div>
           ))}
         </div>
       </section>
