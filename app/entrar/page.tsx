@@ -19,8 +19,17 @@ export default function Entrar() {
     setLoading(true);
 
     if (mode === "freelancer") {
-      setError("O acesso do freelancer será ativado junto ao módulo de identificação por ID.");
-      setLoading(false);
+      const { data, error: loginError } = await supabase.rpc("freelancer_login", {
+        p_system_id: identifier.trim(),
+        p_password: password,
+      });
+      if (loginError || !data?.token) {
+        setError("ID ou senha inválidos.");
+        setLoading(false);
+        return;
+      }
+      localStorage.setItem("losi_freelancer_token", data.token);
+      router.push("/freelancer");
       return;
     }
 
