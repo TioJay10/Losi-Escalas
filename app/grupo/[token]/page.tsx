@@ -24,14 +24,8 @@ export default function Grupo({ params }: GroupPageProps) {
       if (cancelled) return;
       setToken(resolved.token);
 
-      const { data, error } = await supabase
-        .from("group_links")
-        .select("id,group_id,program_id,active,groups(id,name,quantity,quantity_label,responsible_name,responsible_whatsapp),programs(id,date,start_time,end_time,status),parks(name,logo_url,primary_color)")
-        .eq("share_token", resolved.token)
-        .eq("active", true)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_public_group", { p_token: resolved.token });
 
-      if (cancelled) return;
       if (error || !data) {
         setE("Link inválido ou expirado.");
         return;
@@ -82,15 +76,15 @@ export default function Grupo({ params }: GroupPageProps) {
     <main className="dashboard">
       <header className="dash-header">
         <div className="auth-brand"><span className="brand-mark">L</span><span><b>LOSI</b> ESCALA</span></div>
-        <span>{d.parks?.name || "SEU PARQUE"}</span>
+        <span>{d.park?.name || "SEU PARQUE"}</span>
       </header>
 
       <section className="dash-hero">
         <div>
           <span className="eyebrow-text">GRUPO</span>
-          <h1>{d.groups?.name}</h1>
-          <p>{d.groups?.quantity} {d.groups?.quantity_label || "participantes"}</p>
-          <p>{d.groups?.responsible_name || "Responsável não informado"}</p>
+          <h1>{d.group?.name}</h1>
+          <p>{d.group?.quantity} {d.group?.quantity_label || "participantes"}</p>
+          <p>{d.group?.responsible_name || "Responsável não informado"}</p>
         </div>
       </section>
 
