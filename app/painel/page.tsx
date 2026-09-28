@@ -50,7 +50,7 @@ export default function Painel() {
       <Link href="/painel" className="auth-brand"><span className="brand-mark">L</span><span><b>LOSI</b> ESCALA</span></Link>
       <nav className="dash-nav">
         <Link href="/painel" className="active">Visão geral</Link><Link href="/painel/escalas">Escalas</Link><Link href="/painel/freelancers">Freelancers</Link><Link href="/painel/grupos">Grupos</Link><Link href="/painel/programacoes">Programações</Link><Link href="/painel/operacao">Operação</Link>
-      </nav>
+      </nav><details className="dash-mobile-menu"><summary aria-label="Abrir menu">☰</summary><nav><Link href="/painel">Visão geral</Link><Link href="/painel/escalas">Escalas</Link><Link href="/painel/freelancers">Freelancers</Link><Link href="/painel/grupos">Grupos</Link><Link href="/painel/programacoes">Programações</Link><Link href="/painel/operacao">Operação</Link></nav></details>
       <div className="dash-user"><span>{parkName}</span><b>Gestor</b></div>
     </header>
     <section className="dash-hero"><div><span className="eyebrow-text">PAINEL DO GESTOR</span><h1>Bom dia.<br/><span>Sua operação está organizada.</span></h1><p>Uma visão clara da equipe, das escalas e do que acontece no parque.</p></div><Link className="button" href="/painel/escalas">+ Nova escala</Link></section>
