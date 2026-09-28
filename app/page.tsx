@@ -3,7 +3,21 @@
 import { useEffect, useState } from "react";
 
 function RevealText({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`reveal-text ${className}`}>{children}</span>;
+  const text = typeof children === "string" ? children : "";
+  return (
+    <span className={`reveal-text ${className}`} aria-label={text}>
+      {text.split("").map((char, index) => (
+        <span
+          className="reveal-char"
+          key={`${char}-${index}`}
+          style={{ "--char-index": index } as React.CSSProperties}
+          aria-hidden="true"
+        >
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
+    </span>
+  );
 }
 
 function Icon({ type }: { type: "spark"|"users"|"calendar"|"layers"|"shield"|"chart" }) {
@@ -28,13 +42,16 @@ export default function Home() {
 
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll<HTMLElement>(".reveal-text"));
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const el = entry.target as HTMLElement;
-        const ratio = Math.max(0, Math.min(1, entry.intersectionRatio * 1.65));
-        el.style.setProperty("--reveal", String(Math.max(ratio, 0.08)));
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
       });
-    }, { threshold: Array.from({length: 21}, (_, i) => i / 20), rootMargin: "0px 0px -8% 0px" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
+
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
