@@ -2,9 +2,55 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 export default function Entrar() {
+  const router = useRouter();
   const [mode, setMode] = useState<"gestor" | "freelancer">("gestor");
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
+
+    if (mode === "freelancer") {
+      setError("O acesso do freelancer será ativado junto ao módulo de identificação por ID.");
+      setLoading(false);
+      return;
+    }
+
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email: identifier.trim(),
+      password,
+    });
+
+    if (signInError || !data.user) {
+      setError("E-mail ou senha inválidos.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: membership } = await supabase
+      .from("park_users")
+      .select("park_id")
+      .eq("id", data.user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (!membership) {
+      await supabase.auth.signOut();
+      setError("Seu usuário ainda não está vinculado a um parque.");
+      setLoading(false);
+      return;
+    }
+
+    router.push("/painel");
+  }
 
   return (
     <main className="auth-page">
@@ -16,13 +62,18 @@ export default function Entrar() {
           <p>Tenha acesso às suas escalas, grupos, programação e informações da operação.</p>
         </div>
         <div className="auth-switch">
-          <button className={mode === "gestor" ? "active" : ""} onClick={() => setMode("gestor")}>Gestor</button>
-          <button className={mode === "freelancer" ? "active" : ""} onClick={() => setMode("freelancer")}>Freelancer</button>
+          <button type="button" className={mode === "gestor" ? "active" : ""} onClick={() => { setMode("gestor"); setError(""); }}>Gestor</button>
+          <button type="button" className={mode === "freelancer" ? "active" : ""} onClick={() => { setMode("freelancer"); setError(""); }}>Freelancer</button>
         </div>
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
-          <label>{mode === "gestor" ? "E-mail" : "ID do freelancer"}<input type={mode === "gestor" ? "email" : "text"} placeholder={mode === "gestor" ? "seu@email.com" : "TIO-48291"} /></label>
-          <label>Senha<input type="password" placeholder="••••••••" /></label>
-          <button className="button" type="submit">Entrar <span>→</span></button>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>{mode === "gestor" ? "E-mail" : "ID do freelancer"}
+            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} type={mode === "gestor" ? "email" : "text"} placeholder={mode === "gestor" ? "seu@email.com" : "TIO-48291"} required />
+          </label>
+          <label>Senha
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="••••••••" required />
+          </label>
+          {error && <p className="auth-error" role="alert">{error}</p>}
+          <button className="button" type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar"} <span>→</span></button>
         </form>
         <Link href="/" className="auth-back">← Voltar para apresentação</Link>
       </div>
