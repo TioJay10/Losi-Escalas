@@ -6,7 +6,7 @@ function RevealText({ children, className = "" }: { children: React.ReactNode; c
   const text = typeof children === "string" ? children : "";
   return (
     <span className={`reveal-text ${className}`} aria-label={text}>
-      {text.split(/(\\s+)/).map((part, index) => (
+      {text.split(/(\s+)/).map((part, index) => (
         <span className="reveal-word" key={`${part}-${index}`} aria-hidden="true">
           {part.trim()
             ? part.split("").map((char, charIndex) => (
