@@ -61,7 +61,7 @@ export default function Home() {
           <span><b>LOSI</b> ESCALA</span>
         </a>
         <nav className="nav">
-          <a href="#solucao">Solução</a>
+          <a href="#solucao">Como funciona</a>
           <a href="#recursos">Recursos</a>
           <a href="#operacao">Operação</a>
         </nav>
@@ -73,12 +73,12 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-content">
-          <div className="eyebrow"><span className="eyebrow-dot"/> Gestão operacional inteligente</div>
-          <h1><RevealText>Seu parque.</RevealText><br/><RevealText className="gold-text">Sua equipe.</RevealText><br/><RevealText>Tudo sob controle.</RevealText></h1>
-          <p className="hero-copy"><RevealText>Organize sua equipe, crie escalas e acompanhe a operação do seu parque em um só lugar.</RevealText></p>
+          <div className="eyebrow"><span className="eyebrow-dot"/> Sistema de gestão para parques</div>
+          <h1><RevealText>Organize sua equipe.</RevealText><br/><RevealText className="gold-text">Monte suas escalas.</RevealText><br/><RevealText>Controle sua operação.</RevealText></h1>
+          <p className="hero-copy"><RevealText>O LOSI ESCALA reúne freelancers, escalas, grupos e programação em um único sistema. Você organiza quem trabalha, define onde e quando cada grupo estará e acompanha tudo em tempo real.</RevealText></p>
           <div className="hero-actions">
             <a className="button" href="#contato">Conhecer o LOSI ESCALA <span>→</span></a>
-            <a className="text-link" href="#solucao">Descobrir como funciona <span>↓</span></a>
+            <a className="text-link" href="#solucao">Ver como funciona <span>↓</span></a>
           </div>
         </div>
       </section>
@@ -86,8 +86,8 @@ export default function Home() {
       <section className="hero-showcase" aria-label="Visão da operação">
         <div className="showcase-shell">
           <div className="showcase-heading">
-            <span className="eyebrow-text">UMA VISÃO CLARA</span>
-            <h2><RevealText>Da escala ao último grupo do dia.</RevealText></h2>
+            <span className="eyebrow-text">COMO FUNCIONA</span>
+            <h2><RevealText>Da equipe disponível à programação do dia.</RevealText></h2>
           </div>
           <div className="operation-window">
             <div className="window-top">
@@ -96,36 +96,36 @@ export default function Home() {
             </div>
             <div className="window-main">
               <div className="window-number">04</div>
-              <div><span>grupos em operação</span><small>Programação organizada e sem conflitos</small></div>
+              <div><span>grupos em operação</span><small>Horários, atividades e equipe organizados em um só lugar.</small></div>
             </div>
             <div className="window-grid">
-              <div><strong>09:30</strong><span>Piscina</span></div>
-              <div><strong>10:15</strong><span>Oficina</span></div>
-              <div><strong>11:00</strong><span>Recreação</span></div>
-              <div><strong>11:45</strong><span>Circuito</span></div>
+              <div><strong>01</strong><span>Equipe escalada</span></div>
+              <div><strong>04</strong><span>Grupos organizados</span></div>
+              <div><strong>08</strong><span>Atividades programadas</span></div>
+              <div><strong>100%</strong><span>Visão da operação</span></div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="statement">
-        <RevealText className="statement-kicker">GESTÃO SIMPLES. OPERAÇÃO ORGANIZADA.</RevealText>
-        <h2><RevealText>Saiba quem trabalha, onde e quando. Tudo organizado em um só sistema.</RevealText></h2>
+        <RevealText className="statement-kicker">O PROBLEMA</RevealText>
+        <h2><RevealText>Chega de controlar disponibilidade, escalas, grupos e horários em planilhas e conversas espalhadas.</RevealText></h2>
       </section>
 
       <section id="solucao" className="solution section">
         <div className="section-intro">
-          <RevealText className="eyebrow-text">TUDO EM UM SÓ LUGAR</RevealText>
-          <h2><RevealText>Equipe, escalas, grupos e programação organizados.</RevealText></h2>
+          <RevealText className="eyebrow-text">A SOLUÇÃO</RevealText>
+          <h2><RevealText>Você cadastra, organiza, gera e acompanha.</RevealText></h2>
         </div>
         <div className="feature-grid">
           {[
-            ["users","Freelancers","Cadastre sua equipe e controle a disponibilidade."],
-            ["calendar","Escalas","Crie escalas e compartilhe com sua equipe."],
-            ["layers","Grupos","Organize grupos, responsáveis e transportes."],
-            ["spark","Programação inteligente","Monte a programação com horários, limites e regras."],
-            ["shield","Controle de acesso","Cada usuário acessa somente o que precisa."],
-            ["chart","Operação em tempo real","Acompanhe o que acontece agora e o próximo passo."]
+            ["users","Cadastre sua equipe","Registre freelancers, contatos e disponibilidade para saber quem pode trabalhar em cada escala."],
+            ["calendar","Crie e compartilhe escalas","Defina data, horário e limite de pessoas. Gere um link e envie para sua equipe."],
+            ["layers","Organize os grupos","Cadastre quantidade, responsáveis, contatos, transporte e os profissionais de cada grupo."],
+            ["spark","Gere a programação","Defina atividades, duração, capacidade e regras. O sistema monta a programação e aponta conflitos."],
+            ["shield","Controle os acessos","Cada gestor e freelancer acessa apenas as informações permitidas para sua função."],
+            ["chart","Acompanhe em tempo real","Veja o que está acontecendo agora, o próximo horário e a operação de cada grupo."]
           ].map(([icon,title,desc]) => (
             <article className="feature-card" key={title}>
               <div className="icon-box"><Icon type={icon as "spark"}/></div>
@@ -139,10 +139,10 @@ export default function Home() {
 
       <section id="recursos" className="immersive-section">
         <div className="immersive-copy">
-          <RevealText className="eyebrow-text">DO SEU JEITO</RevealText>
-          <h2><RevealText>Configure o sistema para o seu parque.</RevealText></h2>
-          <p><RevealText>Personalize nome, logo, cores, atividades e regras.</RevealText></p>
-          <p><RevealText>Gestor, equipe e grupos conectados à mesma operação.</RevealText></p>
+          <RevealText className="eyebrow-text">FEITO PARA A ROTINA DO PARQUE</RevealText>
+          <h2><RevealText>Menos improviso. Mais controle.</RevealText></h2>
+          <p><RevealText>O gestor sabe quem está disponível, quem está escalado, quais grupos estão ativos e quais atividades precisam acontecer.</RevealText></p>
+          <p><RevealText>O freelancer recebe suas escalas. O grupo tem sua programação. Todos trabalham com a mesma informação.</RevealText></p>
         </div>
         <div className="brand-preview">
           <div className="park-logo">L</div>
@@ -152,7 +152,7 @@ export default function Home() {
       </section>
 
       <section id="operacao" className="operation section">
-        <div className="section-intro"><RevealText className="eyebrow-text">OPERAÇÃO EM TEMPO REAL</RevealText><h2><RevealText>Saiba o que está acontecendo e o que vem depois.</RevealText></h2></div>
+        <div className="section-intro"><RevealText className="eyebrow-text">NO DIA DA OPERAÇÃO</RevealText><h2><RevealText>O sistema mostra o agora, o próximo passo e quem está responsável.</RevealText></h2></div>
         <div className="timeline">
           {[
             ["AGORA","09:30 — 10:00","Piscina","Grupo Azul"],
@@ -168,12 +168,12 @@ export default function Home() {
 
       <section className="closing" id="contato">
         <RevealText className="eyebrow-text">LOSI ESCALA</RevealText>
-        <h2><RevealText>Seu parque já é complexo.</RevealText><br/><RevealText className="gold-text">A gestão não precisa ser.</RevealText></h2>
-        <p><RevealText>Organize sua equipe, automatize sua programação e tenha uma visão clara da operação.</RevealText></p>
+        <h2><RevealText>Da escala à operação.</RevealText><br/><RevealText className="gold-text">Tudo organizado.</RevealText></h2>
+        <p><RevealText>Centralize sua equipe, organize grupos, gere sua programação e acompanhe o parque em tempo real.</RevealText></p>
         <a className="button" href="mailto:contato@losiescala.com">Quero conhecer o LOSI ESCALA <span>→</span></a>
       </section>
 
-      <footer><span>© LOSI ESCALA</span><span>Gestão operacional inteligente</span></footer>
+      <footer><span>© LOSI ESCALA</span><span>Gestão operacional para parques</span></footer>
     </main>
   );
 }
