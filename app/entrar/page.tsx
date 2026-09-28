@@ -19,9 +19,8 @@ export default function Entrar() {
     setLoading(true);
 
     if (mode === "freelancer") {
-      const { data, error: loginError } = await supabase.rpc("freelancer_login", {
-        p_system_id: identifier.trim(),
-        p_password: password,
+      const { data, error: loginError } = await supabase.functions.invoke("freelancer-auth", {
+        body: { action: "login", system_id: identifier.trim(), password },
       });
       if (loginError || !data?.token) {
         setError("ID ou senha inválidos.");
