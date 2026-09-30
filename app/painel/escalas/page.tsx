@@ -57,7 +57,8 @@ export default function EscalasPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [parkId, setParkId] = useState("");
-  const [editing, setEditing] = useState<Scale | null>(null);\n  const [form, setForm] = useState({
+  const [editing, setEditing] = useState<Scale | null>(null);
+  const [form, setForm] = useState({
     date: "",
     start: "08:00",
     end: "17:00",
@@ -191,7 +192,23 @@ export default function EscalasPage() {
     window.setTimeout(() => setCopied(""), 1800);
   }
 
-  async function saveEdit(event: React.FormEvent) {\n    event.preventDefault(); if (!editing || !form.date) return; setSaving(true); setError("");\n    const { error: e } = await supabase.rpc("update_scale", { p_scale_id: editing.id, p_date: form.date, p_start: form.start, p_end: form.end, p_max_freelancers: Number(form.capacity), p_notes: form.notes });\n    if (e) { setError(e.message.includes("capacity_below_active") ? "O limite não pode ser menor que a equipe já inscrita." : "Não foi possível salvar a escala."); setSaving(false); return; }\n    setEditing(null); setSaving(false); await loadScales();\n  }\n\n  async function cancelScale(scale: Scale) {\n    if (!window.confirm("Cancelar esta escala? Os participantes ativos serão marcados como cancelados.")) return;\n    const { error: e } = await supabase.rpc("cancel_scale", { p_scale_id: scale.id });\n    if (e) { setError("Não foi possível cancelar a escala."); return; }\n    await loadScales();\n  }\n\n  function openEdit(scale: Scale) { setEditing(scale); setForm({ date: scale.date, start: scale.start, end: scale.end, capacity: String(scale.capacity), notes: scale.notes }); }\n\n  async function changeStatus(scale: Scale, nextStatus: "open" | "closed") {
+  async function saveEdit(event: React.FormEvent) {
+    event.preventDefault(); if (!editing || !form.date) return; setSaving(true); setError("");
+    const { error: e } = await supabase.rpc("update_scale", { p_scale_id: editing.id, p_date: form.date, p_start: form.start, p_end: form.end, p_max_freelancers: Number(form.capacity), p_notes: form.notes });
+    if (e) { setError(e.message.includes("capacity_below_active") ? "O limite não pode ser menor que a equipe já inscrita." : "Não foi possível salvar a escala."); setSaving(false); return; }
+    setEditing(null); setSaving(false); await loadScales();
+  }
+
+  async function cancelScale(scale: Scale) {
+    if (!window.confirm("Cancelar esta escala? Os participantes ativos serão marcados como cancelados.")) return;
+    const { error: e } = await supabase.rpc("cancel_scale", { p_scale_id: scale.id });
+    if (e) { setError("Não foi possível cancelar a escala."); return; }
+    await loadScales();
+  }
+
+  function openEdit(scale: Scale) { setEditing(scale); setForm({ date: scale.date, start: scale.start, end: scale.end, capacity: String(scale.capacity), notes: scale.notes }); }
+
+  async function changeStatus(scale: Scale, nextStatus: "open" | "closed") {
     const { error: updateError } = await supabase
       .from("scales")
       .update({ status: nextStatus, updated_at: new Date().toISOString() })
@@ -290,7 +307,9 @@ export default function EscalasPage() {
                 <div className="scale-actions">
                   <button onClick={() => void copyLink(scale)}>{copied === scale.id ? "Link copiado ✓" : "Compartilhar link ↗"}</button>
                   {scale.status === "Aberta" && <button onClick={() => void changeStatus(scale, "closed")}>Fechar escala</button>}
-                  {scale.status === "Fechada" && <button onClick={() => void changeStatus(scale, "open")}>Abrir escala</button>}\n                  {scale.status !== "Cancelada" && <button onClick={() => openEdit(scale)}>Editar</button>}\n                  {scale.status !== "Cancelada" && <button onClick={() => void cancelScale(scale)}>Cancelar escala</button>}
+                  {scale.status === "Fechada" && <button onClick={() => void changeStatus(scale, "open")}>Abrir escala</button>}
+                  {scale.status !== "Cancelada" && <button onClick={() => openEdit(scale)}>Editar</button>}
+                  {scale.status !== "Cancelada" && <button onClick={() => void cancelScale(scale)}>Cancelar escala</button>}
                   <Link href={`/painel/escalas/${scale.id}`}>Gerenciar →</Link>
                 </div>
               </article>
@@ -299,7 +318,18 @@ export default function EscalasPage() {
         </div>
       </section>
 
-      {editing && (\n        <div className="scale-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditing(null); }}>\n          <form className="scale-modal" onSubmit={saveEdit}>\n            <div className="scale-modal-head"><div><span className="eyebrow-text">EDITAR ESCALA</span><h2>Atualize a operação.</h2></div><button type="button" onClick={() => setEditing(null)} aria-label="Fechar">×</button></div>\n            <div className="scale-form-grid"><label>Data<input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required /></label><label>Limite de freelancers<input type="number" min="1" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} required /></label><label>Início<input type="time" value={form.start} onChange={(e) => setForm({ ...form, start: e.target.value })} required /></label><label>Fim<input type="time" value={form.end} onChange={(e) => setForm({ ...form, end: e.target.value })} required /></label></div>\n            <label className="scale-notes">Observações<textarea rows={4} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>\n            <div className="scale-modal-footer"><button type="button" className="scale-cancel" onClick={() => setEditing(null)}>Cancelar</button><button className="button" type="submit" disabled={saving}>{saving ? "Salvando..." : "Salvar alterações"}</button></div>\n          </form>\n        </div>\n      )}\n\n      {showNew && (
+      {editing && (
+        <div className="scale-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditing(null); }}>
+          <form className="scale-modal" onSubmit={saveEdit}>
+            <div className="scale-modal-head"><div><span className="eyebrow-text">EDITAR ESCALA</span><h2>Atualize a operação.</h2></div><button type="button" onClick={() => setEditing(null)} aria-label="Fechar">×</button></div>
+            <div className="scale-form-grid"><label>Data<input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required /></label><label>Limite de freelancers<input type="number" min="1" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} required /></label><label>Início<input type="time" value={form.start} onChange={(e) => setForm({ ...form, start: e.target.value })} required /></label><label>Fim<input type="time" value={form.end} onChange={(e) => setForm({ ...form, end: e.target.value })} required /></label></div>
+            <label className="scale-notes">Observações<textarea rows={4} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>
+            <div className="scale-modal-footer"><button type="button" className="scale-cancel" onClick={() => setEditing(null)}>Cancelar</button><button className="button" type="submit" disabled={saving}>{saving ? "Salvando..." : "Salvar alterações"}</button></div>
+          </form>
+        </div>
+      )}
+
+      {showNew && (
         <div className="scale-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowNew(false); }}>
           <form className="scale-modal" onSubmit={createScale}>
             <div className="scale-modal-head">
