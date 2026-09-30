@@ -40,7 +40,7 @@ const emptyForm: GroupForm = {
 };
 
 function normalizeWhatsapp(value: string) {
-  return value.replace(/\\D/g, "");
+  const digits = value.replace(/\\D/g, "");\n  return digits.startsWith("55") ? digits : digits.length >= 10 ? `55${digits}` : digits;
 }
 
 function whatsappHref(value: string | null) {
