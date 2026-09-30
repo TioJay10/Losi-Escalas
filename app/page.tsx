@@ -91,7 +91,18 @@ export default function Home() {
         </nav>
         <div className="header-actions">
           <button className="theme-toggle" onClick={() => setDark(v => !v)} aria-label="Alternar modo escuro">{dark ? "☼" : "☾"}</button>
-          <a className="button button-small" href="#contato">Conhecer</a>
+          <a className="button button-small header-login" href="/entrar">Entrar</a>
+          <a className="button button-small header-know" href="#contato">Conhecer</a>
+          <details className="site-mobile-menu">
+            <summary aria-label="Abrir menu"></summary>
+            <nav>
+              <a href="#solucao">Como funciona</a>
+              <a href="#recursos">Recursos</a>
+              <a href="#operacao">Operação</a>
+              <a href="/entrar" className="mobile-login">Entrar</a>
+              <a href="#contato">Conhecer</a>
+            </nav>
+          </details>
         </div>
       </header>
 
