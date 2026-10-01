@@ -75,7 +75,7 @@ export default function Entrar() {
         </div>
         <form className="auth-form" onSubmit={handleSubmit}>
           <label>{mode === "gestor" ? "E-mail" : "ID do freelancer"}
-            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} type={mode === "gestor" ? "email" : "text"} placeholder={mode === "gestor" ? "seu@email.com" : "TIO-48291"} required />
+            <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} type={mode === "gestor" ? "email" : "text"} placeholder={mode === "gestor" ? "seu@email.com" : "COL-38119"} required />
           </label>
           <label>Senha
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="••••••••" required />
