@@ -1313,3 +1313,127 @@
     font-size:23px;
   }
 }
+
+
+/* Freelancer app controls — explicit component styling */
+.freelancer-page .button,
+.freelancer-page button.button{
+  appearance:none;
+  border:1px solid var(--gold);
+  background:var(--gold);
+  color:#fff;
+  min-height:38px;
+  padding:0 15px;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:none;
+}
+.freelancer-page .button:hover{
+  background:#a77b1d;
+  border-color:#a77b1d;
+  transform:none;
+  box-shadow:none;
+}
+.freelancer-page .button:focus-visible,
+.freelancer-page button:focus-visible{
+  outline:2px solid var(--gold-soft);
+  outline-offset:2px;
+}
+.freelancer-page button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.freelancer-page .dash-menu{
+  width:38px;
+  height:38px;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--surface-strong);
+  color:var(--text);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+}
+.freelancer-page .dash-menu:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+  background:var(--surface);
+}
+.freelancer-page .scales-error{
+  background:var(--surface-strong);
+  border:1px solid rgba(163,75,75,.28);
+  border-radius:10px;
+  color:#9a4545;
+  font-size:12px;
+}
+.freelancer-page .scale-date{
+  min-width:0;
+}
+.freelancer-page .scale-date span,
+.freelancer-page .scale-date strong,
+.freelancer-page .scale-date small{
+  display:block;
+}
+.freelancer-page .scale-date span{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:600;
+  text-transform:uppercase;
+}
+.freelancer-page .scale-date strong{
+  margin-top:5px;
+  color:var(--text);
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.freelancer-page .scale-date small{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+}
+.freelancer-page .scale-card{
+  display:grid;
+  grid-template-columns:105px minmax(0,1fr);
+  gap:20px;
+  padding:18px;
+  align-items:center;
+}
+.freelancer-page .scale-main h2{
+  margin:0;
+}
+.freelancer-page .scale-main .button-danger{
+  appearance:none;
+  background:transparent;
+  color:#9a4545;
+  border:1px solid rgba(154,69,69,.35);
+  min-height:34px;
+  border-radius:8px;
+  box-shadow:none;
+  cursor:pointer;
+}
+.freelancer-page .scale-main .button-danger:hover{
+  background:rgba(154,69,69,.06);
+  border-color:rgba(154,69,69,.55);
+}
+@media(max-width:760px){
+  .freelancer-page .dash-menu{display:flex}
+}
+@media(max-width:620px){
+  .freelancer-page .button{min-height:37px;font-size:11px}
+  .freelancer-page .scale-card{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .freelancer-page .scale-date{
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+}
