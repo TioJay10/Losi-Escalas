@@ -422,3 +422,542 @@
   background:var(--surface-strong);
   color:var(--text);
 }
+/* =========================================================
+   FREELANCER — complete responsive UI
+   ========================================================= */
+.freelancer-page{
+  min-height:100svh;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.freelancer-page .dash-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+}
+
+.freelancer-page .dash-nav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.freelancer-page .dash-nav button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.freelancer-page .dash-nav button:hover,
+.freelancer-page .dash-nav button.active{
+  color:var(--text);
+  background:var(--surface);
+}
+
+.freelancer-page .dash-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;
+}
+
+.freelancer-page .dash-user span{
+  color:var(--gold);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em;
+}
+
+.freelancer-page .dash-user b{
+  font-size:11px;
+}
+
+.freelancer-page .dash-user button{
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--muted);
+  border-radius:9px;
+  min-height:32px;
+  padding:0 11px;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.freelancer-page .dash-user button:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+.freelancer-page .scales-error{
+  margin:18px max(6vw,24px) 0;
+}
+
+.freelancer-page .dash-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+}
+
+.freelancer-page .dash-hero>div{
+  min-width:0;
+}
+
+.freelancer-page .dash-hero>.button{
+  flex:0 0 auto;
+}
+
+.freelancer-page .dash-cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  padding:0 max(6vw,24px) 70px;
+}
+
+.freelancer-page .dash-card{
+  min-width:0;
+  min-height:240px;
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:var(--surface-strong);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  overflow:hidden;
+}
+
+.freelancer-page .dash-card-value{
+  display:block;
+  color:var(--gold);
+  font-size:58px;
+  line-height:1;
+  letter-spacing:-.07em;
+  font-weight:800;
+}
+
+.freelancer-page .dash-card h2{
+  margin:18px 0 0;
+  font-size:21px;
+  letter-spacing:-.04em;
+}
+
+.freelancer-page .dash-card p{
+  margin:9px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.55;
+  max-width:280px;
+}
+
+.freelancer-page .dash-live{
+  margin:0 max(6vw,24px) 90px;
+}
+
+.freelancer-page .dash-live .dash-section-head{
+  min-width:0;
+}
+
+.freelancer-page .live-board{
+  display:grid;
+  gap:10px;
+  min-width:0;
+}
+
+.freelancer-page .live-row{
+  display:grid;
+  grid-template-columns:75px minmax(0,1fr) minmax(110px,auto);
+  gap:14px;
+  align-items:center;
+  min-width:0;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--surface-strong);
+}
+
+.freelancer-page .live-row>span{
+  color:var(--gold);
+  font-size:12px;
+  font-weight:800;
+}
+
+.freelancer-page .live-row strong{
+  min-width:0;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .live-row b{
+  min-width:0;
+  font-size:11px;
+  color:var(--muted);
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .live-row small{
+  grid-column:2/-1;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .scales-content{
+  padding-top:72px;
+}
+
+.freelancer-page .dash-section-head h2{
+  max-width:900px;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .scale-card{
+  background:var(--surface-strong);
+}
+
+.freelancer-page .scale-main{
+  min-width:0;
+}
+
+.freelancer-page .scale-title-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.freelancer-page .scale-title-row>div{
+  min-width:0;
+}
+
+.freelancer-page .scale-title-row h2{
+  margin:8px 0 0;
+  font-size:25px;
+  letter-spacing:-.04em;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .scale-id{
+  color:var(--gold);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.freelancer-page .scale-status{
+  flex:0 0 auto;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.freelancer-page .scale-status-open{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+.freelancer-page .scale-main>p{
+  margin:12px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.freelancer-page .button-danger{
+  margin-top:18px;
+  background:transparent;
+  color:#a34b4b;
+  border:1px solid rgba(163,75,75,.4);
+  box-shadow:none;
+}
+
+.freelancer-page .button-danger:hover{
+  background:rgba(163,75,75,.08);
+  box-shadow:none;
+  transform:none;
+}
+
+.freelancer-page .live-empty{
+  min-height:220px;
+  padding:40px 24px;
+  border:1px dashed var(--line);
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  gap:9px;
+  background:var(--surface-strong);
+}
+
+.freelancer-page .live-empty strong{
+  font-size:16px;
+}
+
+.freelancer-page .live-empty span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.55;
+  max-width:430px;
+}
+
+.freelancer-page .scale-list{
+  min-width:0;
+}
+
+@media(max-width:900px){
+  .freelancer-page .dash-header{
+    height:60px;
+    padding:0 18px;
+  }
+
+  .freelancer-page .dash-nav{
+    position:absolute;
+    top:60px;
+    left:0;
+    right:0;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    padding:12px 16px;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 16px 35px rgba(0,0,0,.08);
+  }
+
+  .freelancer-page .dash-nav.open{
+    display:flex;
+  }
+
+  .freelancer-page .dash-nav button{
+    width:100%;
+    text-align:left;
+    min-height:42px;
+  }
+
+  .freelancer-page .dash-user{
+    display:none;
+  }
+
+  .freelancer-page .dash-hero{
+    align-items:flex-start;
+    flex-direction:column;
+    padding-top:72px;
+  }
+
+  .freelancer-page .dash-hero>.button{
+    width:100%;
+    max-width:360px;
+  }
+
+  .freelancer-page .dash-cards{
+    grid-template-columns:1fr;
+    gap:16px;
+    padding:0 18px 55px;
+  }
+
+  .freelancer-page .dash-card{
+    min-height:180px;
+    text-align:left;
+  }
+
+  .freelancer-page .dash-live{
+    margin:0 18px 65px;
+  }
+
+  .freelancer-page .scales-content{
+    padding:55px 18px 80px;
+  }
+
+  .freelancer-page .scale-card{
+    grid-template-columns:85px 1fr;
+    gap:18px;
+    padding:20px;
+  }
+
+  .freelancer-page .scale-date{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding-bottom:16px;
+  }
+
+  .freelancer-page .scale-main{
+    min-width:0;
+  }
+}
+
+@media(max-width:620px){
+  .freelancer-page .dash-header{
+    padding:0 14px;
+  }
+
+  .freelancer-page .auth-brand{
+    font-size:12px;
+  }
+
+  .freelancer-page .dash-hero{
+    padding:64px 20px 55px;
+    text-align:center;
+    align-items:center;
+  }
+
+  .freelancer-page .dash-hero h1{
+    font-size:45px;
+  }
+
+  .freelancer-page .dash-hero p{
+    font-size:14px;
+  }
+
+  .freelancer-page .dash-hero>.button{
+    width:100%;
+    max-width:none;
+  }
+
+  .freelancer-page .dash-cards{
+    padding:0 16px 48px;
+    gap:12px;
+  }
+
+  .freelancer-page .dash-card{
+    min-height:175px;
+    padding:23px;
+    align-items:center;
+    text-align:center;
+  }
+
+  .freelancer-page .dash-card-value{
+    font-size:50px;
+  }
+
+  .freelancer-page .dash-card h2{
+    font-size:20px;
+  }
+
+  .freelancer-page .dash-card p{
+    max-width:300px;
+  }
+
+  .freelancer-page .dash-live{
+    margin:0 16px 55px;
+    padding:22px 18px;
+    border-radius:22px;
+    gap:18px;
+  }
+
+  .freelancer-page .dash-live .dash-section-head{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:7px;
+  }
+
+  .freelancer-page .live-row{
+    grid-template-columns:1fr;
+    gap:7px;
+    padding:17px;
+    text-align:center;
+  }
+
+  .freelancer-page .live-row>b{
+    text-align:center;
+  }
+
+  .freelancer-page .live-row small{
+    grid-column:auto;
+  }
+
+  .freelancer-page .scales-content{
+    padding:42px 16px 70px;
+  }
+
+  .freelancer-page .dash-section-head{
+    margin-bottom:22px;
+    text-align:center;
+  }
+
+  .freelancer-page .dash-section-head>div{
+    width:100%;
+  }
+
+  .freelancer-page .dash-section-head h2{
+    font-size:31px;
+  }
+
+  .freelancer-page .scale-list{
+    gap:14px;
+  }
+
+  .freelancer-page .scale-card{
+    grid-template-columns:1fr;
+    gap:17px;
+    padding:21px;
+    text-align:center;
+  }
+
+  .freelancer-page .scale-date{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding-bottom:15px;
+    align-items:center;
+  }
+
+  .freelancer-page .scale-date strong{
+    font-size:44px;
+  }
+
+  .freelancer-page .scale-title-row{
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .freelancer-page .scale-title-row h2{
+    font-size:24px;
+  }
+
+  .freelancer-page .scale-status{
+    align-self:center;
+  }
+
+  .freelancer-page .button-danger{
+    width:100%;
+  }
+
+  .freelancer-page .live-empty{
+    min-height:190px;
+    padding:30px 20px;
+  }
+}
+
+@media(max-width:380px){
+  .freelancer-page .dash-hero h1{
+    font-size:40px;
+  }
+
+  .freelancer-page .dash-card{
+    padding:20px 16px;
+  }
+
+  .freelancer-page .scale-card{
+    padding:18px 15px;
+  }
+}
