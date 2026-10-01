@@ -19,19 +19,36 @@ export default function Entrar() {
     setLoading(true);
 
     if (mode === "freelancer") {
-      const { data, error: loginError } = await supabase.functions.invoke("freelancer-auth", {
-        body: { action: "login", system_id: identifier.trim(), password },
-      });
-      if (loginError || !data?.token) {
-        setError("ID ou senha inválidos.");
+      try {
+        const response = await fetch("/api/freelancer/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_id: identifier.trim(),
+            password,
+          }),
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data?.token) {
+          setError(
+            data?.error === "invalid_credentials"
+              ? "ID ou senha inválidos."
+              : "Não foi possível conectar ao acesso do freelancer."
+          );
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem("losi_freelancer_token", data.token);
+        router.push("/freelancer");
+      } catch {
+        setError("Não foi possível conectar ao acesso do freelancer.");
         setLoading(false);
-        return;
       }
-      localStorage.setItem("losi_freelancer_token", data.token);
-      router.push("/freelancer");
       return;
     }
-
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email: identifier.trim(),
       password,
