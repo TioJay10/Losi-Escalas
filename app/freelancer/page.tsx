@@ -28,7 +28,7 @@ export default function FreelancerPage(){
  const now=Date.now();
  const next=useMemo(()=>items.filter(x=>new Date(x.ends_at).getTime()>now).sort((a,b)=>new Date(a.starts_at).getTime()-new Date(b.starts_at).getTime())[0],[items,now]);
  if(loading)return <main className="dashboard freelancer-page"><section className="dash-hero"><div><span className="eyebrow-text">LOSI ESCALA</span><h1>Carregando<br/><span>seu acesso.</span></h1></div></section></main>;
- if(!me)return <main className="dashboard"><section className="dash-hero"><div><span className="eyebrow-text">ACESSO</span><h1>Sessão encerrada.</h1><p>{error}</p><Link className="button" href="/entrar">Entrar novamente</Link></div></section></main>;
+ if(!me)return <main className="dashboard freelancer-page"><section className="dash-hero"><div><span className="eyebrow-text">ACESSO</span><h1>Sessão encerrada.</h1><p>{error}</p><Link className="button" href="/entrar">Entrar novamente</Link></div></section></main>;
  return (
   <main className="dashboard">
     <header className="dash-header">
