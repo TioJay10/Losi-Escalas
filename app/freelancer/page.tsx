@@ -27,12 +27,13 @@ export default function FreelancerPage(){
  async function leave(id:string){const t=localStorage.getItem(tokenKey);if(!t)return;setLeaving(id);try{await call("leave_scale",{token:t,scale_id:id});await load()}catch(e:any){setError(e?.message==="cannot_leave"?"Esta escala não pode mais ser abandonada.":"Não foi possível sair da escala.")}finally{setLeaving("")}}
  const now=Date.now();
  const next=useMemo(()=>items.filter(x=>new Date(x.ends_at).getTime()>now).sort((a,b)=>new Date(a.starts_at).getTime()-new Date(b.starts_at).getTime())[0],[items,now]);
- if(loading)return <main className="dashboard"><section className="dash-hero"><div><span className="eyebrow-text">LOSI ESCALA</span><h1>Carregando<br/><span>seu acesso.</span></h1></div></section></main>;
+ if(loading)return <main className="dashboard freelancer-page"><section className="dash-hero"><div><span className="eyebrow-text">LOSI ESCALA</span><h1>Carregando<br/><span>seu acesso.</span></h1></div></section></main>;
  if(!me)return <main className="dashboard"><section className="dash-hero"><div><span className="eyebrow-text">ACESSO</span><h1>Sessão encerrada.</h1><p>{error}</p><Link className="button" href="/entrar">Entrar novamente</Link></div></section></main>;
  return (
   <main className="dashboard">
     <header className="dash-header">
       <Link href="/freelancer" className="auth-brand"><span className="brand-mark">L</span><span><b>LOSI</b> ESCALA</span></Link>
+      <button className="dash-menu" aria-label="Abrir menu" onClick={(e) => e.currentTarget.nextElementSibling?.classList.toggle("open")}>☰</button>
       <nav className="dash-nav">
         <button className={tab === "inicio" ? "active" : ""} onClick={() => setTab("inicio")}>Início</button>
         <button className={tab === "escalas" ? "active" : ""} onClick={() => setTab("escalas")}>Minhas escalas</button>
